@@ -113,7 +113,7 @@ public class ToastUtils {
 		showT(context, _message, duration);
 	}
 
-	private static <T> void showT(Context context, T message, int duration) {
+	private static void showT(Context context, Object  message, int duration) {
 		int _msg_int = 0;
 		String _msg_str = "";
 		if (message instanceof String) {
