@@ -12,9 +12,17 @@ import android.text.TextUtils;
 
 public class Install {
 
+	/**
+	 * 
+	 * 
+	 * 手机中是否有这个应用
+	 * 
+	 * @param context
+	 * @param packageName
+	 * @return
+	 */
 	public static boolean isInstalledApp(Context context, String packageName) {
 		Boolean flag = false;
-
 		try {
 			PackageManager pm = context.getPackageManager();
 			List<PackageInfo> pkgs = pm
