@@ -117,6 +117,49 @@ public class T {
 		mToast.show();
 	}
 	
+	
+	/**
+	 * 
+	 * 短时间时间，有格式
+	 * @param context
+	 * @param format
+	 * @param duration
+	 * @param args
+	 */
+	public static void show(Context context, String format, Object... args) {
+		
+		String _message = String.format(format, args);
+		if (null != mToast) {
+			mToast.setText(_message);
+			mToast.setDuration(Toast.LENGTH_SHORT);
+		} else {
+			mToast.makeText(context, _message, Toast.LENGTH_SHORT).show();
+		}
+		mToast.show();
+    }
+	
+	/**
+	 * 
+	 * 自定义时间，有格式
+	 * @param context
+	 * @param format
+	 * @param duration
+	 * @param args
+	 */
+	public static void show(Context context, String format, int duration, Object... args) {
+		
+		String _message = String.format(format, args);
+		if (null != mToast) {
+			mToast.setText(_message);
+			mToast.setDuration(duration);
+		} else {
+			mToast.makeText(context, _message, duration).show();
+		}
+		mToast.show();
+    }
+	
+	
+	
 	/**
 	 * 取消显示Toast
 	 */
