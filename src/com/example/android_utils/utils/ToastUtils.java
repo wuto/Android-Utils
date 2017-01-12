@@ -1,20 +1,19 @@
 package com.example.android_utils.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 /**
  * Toast统一管理类
  * 
  */
-public class T {
+public class ToastUtils {
 
-	
+	private static Toast sToast;
+	private static Context sContext;
 
-	private static Toast mToast;
-
-
-	private T(Context context) {
+	private ToastUtils(Context context) {
 		/* cannot be instantiated */
 		throw new UnsupportedOperationException("cannot be instantiated");
 	}
@@ -26,13 +25,7 @@ public class T {
 	 * @param message
 	 */
 	public static void showShort(Context context, CharSequence message) {
-		if (null != mToast) {
-			mToast.setText(message);
-			mToast.setDuration(Toast.LENGTH_SHORT);
-		} else {
-			mToast.makeText(context, message, Toast.LENGTH_SHORT).show();
-		}
-		mToast.show();
+		showT(context, message, Toast.LENGTH_SHORT);
 	}
 
 	/**
@@ -42,13 +35,7 @@ public class T {
 	 * @param message
 	 */
 	public static void showShort(Context context, int message) {
-		if (null != mToast) {
-			mToast.setText(message);
-			mToast.setDuration(Toast.LENGTH_SHORT);
-		} else {
-			mToast.makeText(context, message, Toast.LENGTH_SHORT).show();
-		}
-		mToast.show();
+		showT(context, message, Toast.LENGTH_SHORT);
 	}
 
 	/**
@@ -58,13 +45,7 @@ public class T {
 	 * @param message
 	 */
 	public static void showLong(Context context, CharSequence message) {
-		if (null != mToast) {
-			mToast.setText(message);
-			mToast.setDuration(Toast.LENGTH_LONG);
-		} else {
-			mToast.makeText(context, message, Toast.LENGTH_LONG).show();
-		}
-		mToast.show();
+		showT(context, message, Toast.LENGTH_LONG);
 	}
 
 	/**
@@ -74,13 +55,7 @@ public class T {
 	 * @param message
 	 */
 	public static void showLong(Context context, int message) {
-		if (null != mToast) {
-			mToast.setText(message);
-			mToast.setDuration(Toast.LENGTH_LONG);
-		} else {
-			mToast.makeText(context, message, Toast.LENGTH_LONG).show();
-		}
-		mToast.show();
+		showT(context, message, Toast.LENGTH_LONG);
 	}
 
 	/**
@@ -91,13 +66,8 @@ public class T {
 	 * @param duration
 	 */
 	public static void show(Context context, CharSequence message, int duration) {
-		if (null != mToast) {
-			mToast.setText(message);
-			mToast.setDuration(duration);
-		} else {
-			mToast.makeText(context, message, duration).show();
-		}
-		mToast.show();
+
+		showT(context, message, duration);
 	}
 
 	/**
@@ -108,64 +78,81 @@ public class T {
 	 * @param duration
 	 */
 	public static void show(Context context, int message, int duration) {
-		if (null != mToast) {
-			mToast.setText(message);
-			mToast.setDuration(duration);
-		} else {
-			mToast.makeText(context, message, duration).show();
-		}
-		mToast.show();
+
+		showT(context, message, duration);
 	}
-	
-	
+
 	/**
 	 * 
 	 * 短时间时间，有格式
+	 * 
 	 * @param context
 	 * @param format
 	 * @param duration
 	 * @param args
 	 */
 	public static void show(Context context, String format, Object... args) {
-		
+
 		String _message = String.format(format, args);
-		if (null != mToast) {
-			mToast.setText(_message);
-			mToast.setDuration(Toast.LENGTH_SHORT);
-		} else {
-			mToast.makeText(context, _message, Toast.LENGTH_SHORT).show();
-		}
-		mToast.show();
-    }
-	
+		showT(context, _message, Toast.LENGTH_SHORT);
+	}
+
 	/**
 	 * 
 	 * 自定义时间，有格式
+	 * 
 	 * @param context
 	 * @param format
 	 * @param duration
 	 * @param args
 	 */
-	public static void show(Context context, String format, int duration, Object... args) {
-		
+	public static void show(Context context, String format, int duration,
+			Object... args) {
+
 		String _message = String.format(format, args);
-		if (null != mToast) {
-			mToast.setText(_message);
-			mToast.setDuration(duration);
+		showT(context, _message, duration);
+	}
+
+	private static <T> void showT(Context context, T message, int duration) {
+		int _msg_int = 0;
+		String _msg_str = "";
+		if (message instanceof String) {
+			_msg_str = (String) message;
+		} else if (message instanceof Integer) {
+			_msg_int = (Integer) message;
 		} else {
-			mToast.makeText(context, _message, duration).show();
+			return;
 		}
-		mToast.show();
-    }
-	
-	
-	
+		if (null != sToast) {
+			if (_msg_int != 0 && TextUtils.isEmpty(_msg_str)) {
+				sToast.setText(_msg_int);
+			} else if (_msg_int == 0 && !TextUtils.isEmpty(_msg_str)) {
+				sToast.setText(_msg_str);
+			} else {
+				return;
+			}
+			sToast.setDuration(duration);
+		} else {
+			if (sContext == null) {
+				sContext = context.getApplicationContext();
+			}
+			if (_msg_int != 0 && TextUtils.isEmpty(_msg_str)) {
+				sToast.makeText(sContext, _msg_int, duration);
+			} else if (_msg_int == 0 && !TextUtils.isEmpty(_msg_str)) {
+				sToast.makeText(sContext, _msg_str, duration);
+			} else {
+				return;
+			}
+		}
+		sToast.show();
+	}
+
 	/**
 	 * 取消显示Toast
 	 */
 	public void cancelToast() {
-		if (mToast != null) {
-			mToast.cancel();
+		if (sToast != null) {
+			sToast.cancel();
 		}
 	}
 
