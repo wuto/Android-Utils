@@ -137,9 +137,9 @@ public class ToastUtils {
 				sContext = context.getApplicationContext();
 			}
 			if (_msg_int != 0 && TextUtils.isEmpty(_msg_str)) {
-				sToast.makeText(sContext, _msg_int, duration);
+				sToast=Toast.makeText(sContext, _msg_int, duration);
 			} else if (_msg_int == 0 && !TextUtils.isEmpty(_msg_str)) {
-				sToast.makeText(sContext, _msg_str, duration);
+				sToast=Toast.makeText(sContext, _msg_str, duration);
 			} else {
 				return;
 			}
